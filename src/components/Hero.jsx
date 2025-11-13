@@ -15,6 +15,20 @@ const usePrefersReducedMotion = () => {
   return reduced
 }
 
+const useSaveData = () => {
+  const [saveData, setSaveData] = useState(false)
+  useEffect(() => {
+    const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection
+    const update = () => setSaveData(!!(conn && conn.saveData))
+    update()
+    if (conn && 'onchange' in conn) conn.addEventListener('change', update)
+    return () => {
+      if (conn && 'onchange' in conn) conn.removeEventListener('change', update)
+    }
+  }, [])
+  return saveData
+}
+
 const useIsMobile = () => {
   const [mobile, setMobile] = useState(false)
   useEffect(() => {
@@ -145,8 +159,10 @@ export default function Hero() {
   const rotY = useTransform(mouseX, [0, 1], [-6, 6])
 
   const containerRef = useRef(null)
-  const reduced = usePrefersReducedMotion()
+  const reducedMotion = usePrefersReducedMotion()
+  const saveData = useSaveData()
   const isMobile = useIsMobile()
+  const reduced = reducedMotion || saveData
 
   useEffect(() => {
     controls.start({ opacity: 1, y: 0, transition: { duration: reduced ? 0.3 : 0.8, ease: 'easeOut' } })
@@ -216,7 +232,7 @@ export default function Hero() {
                 <RotatingCube />
               </div>
             ) : (
-              <Hero3D className="h-full w-full" />
+              <Hero3D className="h-full w-full" reduced={reduced} />
             )}
           </div>
           {/* light floating particles (CSS-only) */}
