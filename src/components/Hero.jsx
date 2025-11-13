@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { motion, useAnimation, useMotionValue, useTransform } from 'framer-motion'
-import Spline from '@splinetool/react-spline'
 import { ArrowRight, Mail } from 'lucide-react'
+import Hero3D from './Hero3D'
 
 const usePrefersReducedMotion = () => {
   const [reduced, setReduced] = useState(false)
@@ -202,7 +202,7 @@ export default function Hero() {
           </div>
         </motion.div>
 
-        {/* Visual: Spline on desktop, ultra-light mobile visual */}
+        {/* Visual: R3F 3D on desktop, ultra-light mobile visual */}
         <motion.div
           animate={{ opacity: [0, 1], y: [20, 0] }}
           transition={{ delay: 0.1, duration: reduced ? 0.3 : 0.8, ease: 'easeOut' }}
@@ -216,7 +216,7 @@ export default function Hero() {
                 <RotatingCube />
               </div>
             ) : (
-              <Spline scene="https://prod.spline.design/VyGeZv58yuk8j7Yy/scene.splinecode" style={{ width: '100%', height: '100%' }} />
+              <Hero3D className="h-full w-full" />
             )}
           </div>
           {/* light floating particles (CSS-only) */}
